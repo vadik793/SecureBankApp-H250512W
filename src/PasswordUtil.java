@@ -1,4 +1,4 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -7,10 +7,10 @@ import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-/**
- * Secure password handling (Authentication Techniques): random salt + PBKDF2 hashing from the standard
- * library (Economy of Mechanism: a well-vetted algorithm, not a custom one). Passwords are never stored.
- */
+
+
+
+
 public final class PasswordUtil {
     private static final int ITERATIONS = 120_000;
     private static final int KEY_BITS = 256;
@@ -36,7 +36,7 @@ public final class PasswordUtil {
         }
     }
 
-    /** Constant-time comparison to avoid timing attacks. */
+
     public static boolean verify(char[] password, String saltBase64, String expectedHash) {
         return MessageDigest.isEqual(hash(password, saltBase64).getBytes(), expectedHash.getBytes());
     }

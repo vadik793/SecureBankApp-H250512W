@@ -1,4 +1,4 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.Duration;
@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Supplier;
 
-/**
- * Business logic. Every operation:
- *  1. checks the session is valid (authentication / session expiry),
- *  2. checks the caller holds the required PERMISSION for their CURRENT role (RBAC / least privilege),
- *  3. re-validates its input (defence in depth - the UI also validates),
- *  4. checks ownership of the account (stops horizontal privilege escalation),
- *  5. persists changes, or rolls back and fails securely if saving fails,
- *  6. writes an audit log entry (accountability / non-repudiation).
- */
+
+
+
+
+
+
+
+
+
 public class Bank {
     public static final int MAX_FAILED_ATTEMPTS = 3;
     private static final Duration DEFAULT_TIMEOUT = Duration.ofMinutes(5);
@@ -40,8 +40,8 @@ public class Bank {
         load();
     }
 
-    // ---------- persistence ----------
-    /** Reads everything into temporary collections first; memory is only replaced if every read succeeded. */
+
+
     private void load() {
         Map<String, User> u = new HashMap<>();
         Map<String, Account> a = new LinkedHashMap<>();
@@ -81,21 +81,21 @@ public class Bank {
         store.writeLines(TRANSACTIONS, l);
     }
 
-    /** Fail securely: if saving fails, discard the unsaved in-memory change and report a generic error. */
+
     private void persist(Runnable save) {
         try {
             save.run();
         } catch (StorageException e) {
-            try { load(); } catch (RuntimeException ignored) { /* keep current state if reload also fails */ }
+            try { load(); } catch (RuntimeException ignored) {  }
             throw new StorageException();
         }
     }
 
-    // ---------- authentication ----------
-    /**
-     * Registers a user. Fail-safe default: everyone is a CUSTOMER. Bootstrap rule: the very first user
-     * becomes the ADMIN so that someone can manage the system (a real system would provision this securely).
-     */
+
+
+
+
+
     public Role register(String username, char[] password) {
         username = normalise(username);
         if (!InputValidator.isValidUsername(username))
@@ -120,16 +120,16 @@ public class Bank {
         return login(username, password, () -> "");
     }
 
-    /**
-     * Password first, then (if the user enabled MFA) a one-time code. The code is only requested AFTER the
-     * password is correct, so the prompt never reveals whether a username exists. Failures use one vague message.
-     */
+
+
+
+
     public Session login(String username, char[] password, Supplier<String> otpSupplier) {
         username = normalise(username);
         User u = users.get(username);
         String logName = InputValidator.isValidUsername(username) ? username : "<invalid>";
         if (u == null) {
-            PasswordUtil.hash(password, PasswordUtil.generateSalt()); // same work as a real login (timing)
+            PasswordUtil.hash(password, PasswordUtil.generateSalt());
             audit.log("LOGIN_FAILED", logName, "unknown user");
             throttle();
             throw new AuthenticationException();
@@ -167,14 +167,14 @@ public class Bank {
         if (s != null) audit.log("LOGOUT", s.getUsername(), "-");
     }
 
-    /** Slows down brute-force guessing. */
+
     private void throttle() {
         try { Thread.sleep(1000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     private static String normalise(String s) { return s == null ? "" : s.trim().toLowerCase(Locale.ROOT); }
 
-    // ---------- authorization ----------
+
     public void checkSession(Session s) {
         if (s == null || s.isExpired()) {
             if (s != null) audit.log("SESSION_EXPIRED", s.getUsername(), "inactivity timeout");
@@ -183,10 +183,10 @@ public class Bank {
         s.touch();
     }
 
-    /**
-     * Central, consistently-enforced authorization check. Uses the user's CURRENT role from the user store
-     * (not the role copied into the session), so a role change takes effect immediately. Default: deny.
-     */
+
+
+
+
     private void require(Session s, Permission p) {
         checkSession(s);
         User u = users.get(s.getUsername());
@@ -207,7 +207,7 @@ public class Bank {
         return a;
     }
 
-    // ---------- customer operations ----------
+
     public AccountInfo createAccount(Session s, String type) {
         require(s, Permission.CREATE_ACCOUNT);
         if (!InputValidator.isValidAccountType(type)) throw new InvalidInputException("Account type must be SAVINGS or CURRENT.");
@@ -222,7 +222,7 @@ public class Bank {
         return a.toInfo();
     }
 
-    /** Returns read-only snapshots, never the real Account objects. */
+
     public List<AccountInfo> getAccounts(Session s) {
         require(s, Permission.VIEW_BALANCE);
         List<AccountInfo> out = new ArrayList<>();
@@ -265,8 +265,8 @@ public class Bank {
         return Collections.unmodifiableList(out);
     }
 
-    // ---------- multi-factor authentication (any role) ----------
-    /** Enables MFA and returns the Base32 secret to add to an authenticator app. It is shown only once. */
+
+
     public String enableMfa(Session s) {
         require(s, Permission.ENABLE_MFA);
         User u = users.get(s.getUsername());
@@ -283,7 +283,7 @@ public class Bank {
         return secret;
     }
 
-    // ---------- administrator operations ----------
+
     public List<String> listUsers(Session s) {
         require(s, Permission.MANAGE_USERS);
         List<String> out = new ArrayList<>();
@@ -301,10 +301,10 @@ public class Bank {
         audit.log("ADMIN_UNLOCK", s.getUsername(), "unlocked " + u.getUsername());
     }
 
-    /**
-     * Role assignment with escalation guards: an admin cannot change their own role, and the ADMIN role can
-     * never be handed out (only CUSTOMER or AUDITOR), so privileges cannot be escalated through this method.
-     */
+
+
+
+
     public void assignRole(Session s, String username, String roleName) {
         require(s, Permission.ASSIGN_ROLES);
         if (!"CUSTOMER".equals(roleName) && !"AUDITOR".equals(roleName))
@@ -327,7 +327,7 @@ public class Bank {
         audit.log("ROLE_ASSIGNED", s.getUsername(), u.getUsername() + " -> " + roleName);
     }
 
-    // ---------- audit log (admin and auditor) ----------
+
     public List<String> readAuditLog(Session s) {
         require(s, Permission.VIEW_AUDIT_LOG);
         audit.log("AUDIT_VIEWED", s.getUsername(), "-");
@@ -339,9 +339,9 @@ public class Bank {
         return audit.verify();
     }
 
-    // ---------- error handling ----------
-    /** Unexpected errors: details go to the log (class name only), the user only sees a generic message. */
+
+
     public void logUnexpected(String user, Exception e) {
-        try { audit.log("ERROR", user, e.getClass().getSimpleName()); } catch (RuntimeException ignored) { /* nothing more we can do */ }
+        try { audit.log("ERROR", user, e.getClass().getSimpleName()); } catch (RuntimeException ignored) {  }
     }
 }

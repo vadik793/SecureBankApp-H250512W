@@ -1,11 +1,11 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Text-file implementation of DataStore. I/O problems fail securely: they raise StorageException (never ignored). */
+
 public class FileStorage implements DataStore {
     private final Path dir;
 
@@ -33,7 +33,7 @@ public class FileStorage implements DataStore {
         }
     }
 
-    /** Writes to a temp file first, then replaces the real file, so a crash cannot corrupt data. */
+
     @Override
     public synchronized void writeLines(String fileName, List<String> lines) {
         Path file = dir.resolve(fileName);

@@ -1,7 +1,7 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.util.*;
 
-/** Test double for DataStore: keeps data in memory and can simulate a disk failure. */
+
 public class InMemoryStore implements DataStore {
     private final Map<String, List<String>> files = new HashMap<>();
     public boolean failWrites = false;
@@ -23,7 +23,7 @@ public class InMemoryStore implements DataStore {
         files.computeIfAbsent(name, k -> new ArrayList<>()).add(line);
     }
 
-    /** Lets a test simulate an attacker editing a stored file. */
+
     public void replaceLine(String name, int index, String newLine) {
         files.get(name).set(index, newLine);
     }

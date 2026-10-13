@@ -1,9 +1,9 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
-/** Session management: a login session that expires after a period of inactivity (token expiration). */
+
 public final class Session {
     private final String username;
     private final Role role;

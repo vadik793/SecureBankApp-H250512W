@@ -1,17 +1,17 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Secure logging (Unit: Secure Logging Techniques).
- * - Structured JSON, one event per line, with a timestamp and the user (supports non-repudiation).
- * - Never receives passwords or other secrets; every value is escaped (prevents log injection) and length-limited.
- * - Append-only, and TAMPER-EVIDENT: each entry stores the SHA-256 hash of the previous entry (a hash chain),
- *   so editing or deleting an earlier line is detected by verify().
- */
+
+
+
+
+
+
+
 public final class AuditLogger {
     private static final String FILE = "audit.log";
     private static final String GENESIS = "0".repeat(64);
@@ -47,7 +47,7 @@ public final class AuditLogger {
 
     public List<String> readAll() { return store.readLines(FILE); }
 
-    /** Re-computes the hash chain and reports whether the log has been altered. */
+
     public String verify() {
         String prev = GENESIS;
         int n = 0;

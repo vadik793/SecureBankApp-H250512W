@@ -1,4 +1,4 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -7,16 +7,16 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
-/**
- * Security-focused unit tests (no external libraries needed).
- * Run:  java -cp out SecurityTests      (compile first - see README)
- * Each test maps to a secure-coding concept from the course.
- */
+
+
+
+
+
 public class SecurityTests {
     private static int passed = 0, failed = 0;
     private static final char[] PW = "Strong#Pass1".toCharArray();
 
-    // ---------- tiny test harness ----------
+
     private static void check(String name, boolean ok) {
         if (ok) { passed++; System.out.println("  PASS  " + name); }
         else { failed++; System.out.println("  FAIL  " + name); }
@@ -33,10 +33,10 @@ public class SecurityTests {
 
     private static void section(String s) { System.out.println("\n" + s); }
 
-    // ---------- helpers ----------
+
     private static Bank newBank(InMemoryStore store) { return new Bank(store); }
 
-    /** Registers admin1 (first user = admin), alice and bob (customers). */
+
     private static Bank setup(InMemoryStore store) {
         Bank b = newBank(store);
         b.register("admin1", PW.clone());
@@ -219,7 +219,7 @@ public class SecurityTests {
         if (failed > 0) System.exit(1);
     }
 
-    /** Small helper used by the password-storage test. */
+
     private static final class InMemoryStoreHolder {
         List<String> usersFileAfterRegister() {
             InMemoryStore s = new InMemoryStore();

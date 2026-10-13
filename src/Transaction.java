@@ -1,11 +1,11 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Immutable object (Unit 2): final class, private final fields, no setters, and only immutable field types.
- * Once created it can never be altered, so it is safe to share.
- */
+
+
+
+
 public final class Transaction {
     public enum Type { DEPOSIT, WITHDRAW }
 

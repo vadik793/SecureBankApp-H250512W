@@ -1,19 +1,19 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Abstract base class (Inheritance + Polymorphism, Unit 2).
- * - The balance is private (encapsulation) and only changes through deposit/withdraw.
- * - deposit() and withdraw() are FINAL so a subclass cannot override them and bypass the rules.
- * - Subclasses may only customise the PROTECTED hook minimumAllowedBalance().
- */
+
+
+
+
+
+
 public abstract class Account {
     private final String accountNumber;
     private final String owner;
     private BigDecimal balance;
 
-    /** Secure constructor: validates everything, so an invalid Account can never be created. */
+
     protected Account(String accountNumber, String owner, BigDecimal balance) {
         if (!InputValidator.isValidAccountNumber(accountNumber)) throw new IllegalArgumentException("Invalid account number");
         if (!InputValidator.isValidUsername(owner)) throw new IllegalArgumentException("Invalid owner");
@@ -27,7 +27,7 @@ public abstract class Account {
         this.owner = owner;
     }
 
-    /** Lowest balance allowed after a withdrawal (0 for savings, negative for an overdraft). */
+
     protected abstract BigDecimal minimumAllowedBalance();
 
     public abstract String getType();
@@ -59,7 +59,7 @@ public abstract class Account {
         return getType() + "|" + accountNumber + "|" + owner + "|" + balance.toPlainString();
     }
 
-    /** Factory: only whitelisted account types can be created. */
+
     public static Account create(String type, String number, String owner, BigDecimal balance) {
         switch (type) {
             case "SAVINGS": return new SavingsAccount(number, owner, balance);

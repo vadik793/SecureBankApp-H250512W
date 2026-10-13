@@ -1,10 +1,10 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.io.Console;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
-/** Console user interface. It only talks to Bank, which enforces all the security rules. */
+
 public class Main {
     private static final Scanner IN = new Scanner(System.in);
     private static final Console CONSOLE = System.console();
@@ -36,14 +36,14 @@ public class Main {
         }
     }
 
-    // ---------- input helpers ----------
+
     private static String ask(String prompt) {
         System.out.print(prompt);
         if (!IN.hasNextLine()) { System.out.println(); System.exit(0); }
         return IN.nextLine().trim();
     }
 
-    /** Reads a password without echoing when run in a real terminal. */
+
     private static char[] askPassword(String prompt) {
         if (CONSOLE != null) return CONSOLE.readPassword(prompt);
         System.out.print(prompt);
@@ -57,7 +57,7 @@ public class Main {
         return amt;
     }
 
-    // ---------- start menu ----------
+
     private static void doRegister() {
         String user = ask("Choose username: ");
         char[] pw = askPassword("Choose password: ");
@@ -98,7 +98,7 @@ public class Main {
         System.out.println("  Or URI : otpauth://totp/SecureBank:" + s.getUsername() + "?secret=" + secret + "&issuer=SecureBank");
     }
 
-    /** Shared error handling for all menus. Returns true if the session ended. */
+
     private static boolean handle(RuntimeException e, Session s) {
         if (e instanceof SessionExpiredException) {
             System.out.println(e.getMessage());
@@ -113,7 +113,7 @@ public class Main {
         return false;
     }
 
-    // ---------- customer menu ----------
+
     private static void customerMenu(Session s) {
         while (true) {
             System.out.println("\n--- Customer Menu (" + s.getUsername() + ") ---");
@@ -161,7 +161,7 @@ public class Main {
             System.out.println(a.number() + "  [" + a.type() + "]  balance: " + a.balance().toPlainString());
     }
 
-    // ---------- administrator menu ----------
+
     private static void adminMenu(Session s) {
         while (true) {
             System.out.println("\n--- Administrator Menu (" + s.getUsername() + ") ---");
@@ -190,7 +190,7 @@ public class Main {
         }
     }
 
-    // ---------- auditor menu (read-only oversight) ----------
+
     private static void auditorMenu(Session s) {
         while (true) {
             System.out.println("\n--- Auditor Menu (" + s.getUsername() + ") ---");

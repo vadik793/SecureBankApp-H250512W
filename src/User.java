@@ -1,10 +1,10 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.util.Objects;
 
-/**
- * A bank user. Only the salted password hash is kept. Secure constructor: input is validated at creation, so an
- * invalid User can never exist. setRole/setMfaSecret are PACKAGE-PRIVATE: only Bank (same package) can call them.
- */
+
+
+
+
 public class User {
     private final String username;
     private final String salt;
@@ -12,7 +12,7 @@ public class User {
     private Role role;
     private int failedAttempts;
     private boolean locked;
-    private String mfaSecret; // Base32, or "-" when MFA is not enabled
+    private String mfaSecret;
 
     public User(String username, String salt, String passwordHash, int failedAttempts, boolean locked, Role role, String mfaSecret) {
         if (!InputValidator.isValidUsername(username)) throw new IllegalArgumentException("Invalid username");

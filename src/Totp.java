@@ -1,4 +1,4 @@
-// Author: Kudzaishe Andrea | Reg No: H250512W | Secure Banking Application
+
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
@@ -6,10 +6,10 @@ import java.security.SecureRandom;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-/**
- * Multi-Factor Authentication (possession factor): time-based one-time passwords, RFC 6238
- * (HMAC-SHA1, 6 digits, 30 second steps). Compatible with Google Authenticator, Microsoft Authenticator, etc.
- */
+
+
+
+
 public final class Totp {
     private static final String B32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -67,7 +67,7 @@ public final class Totp {
         }
     }
 
-    /** Accepts the current code and one step either side (clock drift). Input must be exactly 6 digits. */
+
     public static boolean verify(byte[] secret, String code, long nowSeconds) {
         if (code == null || !code.matches("\\d{6}")) return false;
         boolean ok = false;
